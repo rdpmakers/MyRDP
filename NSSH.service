@@ -1,5 +1,5 @@
 [Unit]
-Description=WebSSH terminal interface
+Description=VPSFree SSH Ngrok tunnel
 After=network.target
 
 [Service]
