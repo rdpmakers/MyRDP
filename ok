@@ -8,7 +8,28 @@
 # processname: myservice
 
 # Source function library
-. /etc/init.d/functions
+if [ -e /lib/lsb/init-functions ]; then
+    . /lib/lsb/init-functions
+   log_success() {
+        log_success_msg "\$1"
+    }
+
+    log_failure() {
+        log_failure_msg "\$1"
+    }
+else
+    . /etc/rc.d/init.d/functions
+
+    log_success() {
+        echo_success
+        echo "\$1"
+    }
+
+    log_failure() {
+        echo_failure
+        echo "\$1"
+    }
+fi
 
 #the service name, a python script
 #SNAME=myservice
@@ -36,17 +57,6 @@ start() {
             
         else
             log_failure "failed"
-        fi
-        ;;
-    stop)
-        echo "Stopping \$NAME:"
-        if pidofproc -p \$PIDFILE \$PANEL > /dev/null; then
-            su -c "/usr/bin/screen -XS pro quit" root
-            killproc -p \$PIDFILE \$PANEL
-            /bin/rm -rf \$PIDFILE
-            log_success "stopped"
-        else
-           log_failure "not running"
         fi
 }
 
